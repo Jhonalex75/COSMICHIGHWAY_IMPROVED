@@ -9,10 +9,14 @@ import InsightDialog from '@/components/insight-dialog';
 import InfoPanel from '@/components/info-panel';
 
 export default function Home() {
-  const [isPlaying, setIsPlaying] = useState(true);
   const [animationSpeed, setAnimationSpeed] = useState(0.01);
   const [selectedAsteroid, setSelectedAsteroid] = useState<Asteroid | null>(null);
   const [asteroidMetrics, setAsteroidMetrics] = useState<Record<string, { distanceToSun: number; velocity: number; acceleration: number }>>({});
+  const [playingState, setPlayingState] = useState<Record<string, boolean>>({
+    "1I/'Oumuamua": true,
+    "2I/Borisov": true,
+    "3I/Atlas": true,
+  });
 
   const handleAsteroidClick = (asteroidName: string) => {
     const asteroid = ASTEROID_DATA[asteroidName as keyof typeof ASTEROID_DATA];
@@ -23,6 +27,10 @@ export default function Home() {
 
   const handleMetricsUpdate = (name: string, metrics: { distanceToSun: number; velocity: number; acceleration: number }) => {
     setAsteroidMetrics(prev => ({ ...prev, [name]: metrics }));
+  };
+  
+  const handleTogglePlay = (asteroidName: string) => {
+    setPlayingState(prev => ({ ...prev, [asteroidName]: !prev[asteroidName] }));
   };
 
   return (
@@ -36,17 +44,18 @@ export default function Home() {
         sun={SUN_DATA}
         planets={Object.values(PLANET_DATA)}
         asteroids={Object.values(ASTEROID_DATA)}
-        isPlaying={isPlaying}
+        playingState={playingState}
         animationSpeed={animationSpeed}
         onAsteroidClick={handleAsteroidClick}
         onMetricsUpdate={handleMetricsUpdate}
       />
       
       <Controls
-        isPlaying={isPlaying}
-        onTogglePlay={() => setIsPlaying(!isPlaying)}
+        playingState={playingState}
+        onTogglePlay={handleTogglePlay}
         animationSpeed={animationSpeed}
         onSpeedChange={setAnimationSpeed}
+        asteroids={Object.values(ASTEROID_DATA)}
       />
 
       <InfoPanel />

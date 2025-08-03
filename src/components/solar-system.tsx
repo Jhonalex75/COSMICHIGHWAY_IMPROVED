@@ -11,7 +11,7 @@ interface SolarSystemProps {
   sun: CelestialBody;
   planets: Planet[];
   asteroids: Asteroid[];
-  isPlaying: boolean;
+  playingState: Record<string, boolean>;
   animationSpeed: number;
   onAsteroidClick: (name: string) => void;
   onMetricsUpdate: (name: string, metrics: { distanceToSun: number; velocity: number; acceleration: number }) => void;
@@ -25,9 +25,10 @@ interface CelestialObject {
   velocity: THREE.Vector3;
   acceleration: THREE.Vector3;
   data: Planet | Asteroid;
+  timeOffset: number;
 }
 
-const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, isPlaying, animationSpeed, onAsteroidClick, onMetricsUpdate }) => {
+const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, playingState, animationSpeed, onAsteroidClick, onMetricsUpdate }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const state = useRef<{
     celestialObjects: Map<string, CelestialObject>;
@@ -97,7 +98,7 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, isPl
       const trajectoryPoints = getTrajectoryPoints(bodyData.elements);
       if (trajectoryPoints.length < 2) return;
       
-      const path = new THREE.CatmullRomCurve3(trajectoryPoints, true);
+      const path = new THREE.CatmullRomCurve3(trajectoryPoints, false);
       const geometry = new THREE.BufferGeometry().setFromPoints(path.getPoints(500));
       const material = new THREE.LineBasicMaterial({ color: bodyData.color, transparent: true, opacity: 0.5 });
       const trajectoryLine = new THREE.Line(geometry, material);
@@ -124,11 +125,13 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, isPl
         velocity: new THREE.Vector3(),
         acceleration: new THREE.Vector3(),
         data: bodyData,
+        timeOffset: 0,
       });
     });
 
     // Animation loop
     state.lastUpdateTime = state.clock.getElapsedTime();
+    state.clock.start();
 
     const animate = () => {
       requestAnimationFrame(animate);
@@ -137,33 +140,43 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, isPl
       const deltaTime = elapsedTime - state.lastUpdateTime;
       state.lastUpdateTime = elapsedTime;
 
-      if (isPlaying && deltaTime > 0) {
+      if (deltaTime > 0) {
         state.celestialObjects.forEach((obj, name) => {
-          const visualSpeedMultiplier = (obj.data as Asteroid).visualSpeedMultiplier ?? 1.0;
-          const time = (elapsedTime * animationSpeed * visualSpeedMultiplier) % 1;
+          const isAsteroid = asteroids.some(a => a.name === name);
+          const isPlaying = isAsteroid ? playingState[name] : true;
+
+          if (isPlaying) {
+            const visualSpeedMultiplier = (obj.data as Asteroid).visualSpeedMultiplier ?? 1.0;
+            obj.timeOffset += deltaTime * animationSpeed * visualSpeedMultiplier;
+          }
+
+          const time = obj.timeOffset % 1;
           const position = obj.path.getPointAt(time);
           obj.body.position.copy(position);
   
-          if (asteroids.some(a => a.name === name)) {
+          if (isAsteroid) {
               const distanceToSun = position.length();
               
-              const newVelocity = position.clone().sub(obj.prevPosition).divideScalar(deltaTime);
-              if(isFinite(newVelocity.x) && isFinite(newVelocity.y) && isFinite(newVelocity.z)) {
-                const newAcceleration = newVelocity.clone().sub(obj.velocity).divideScalar(deltaTime);
-  
-                obj.velocity.copy(newVelocity);
-                if(isFinite(newAcceleration.x) && isFinite(newAcceleration.y) && isFinite(newAcceleration.z)) {
-                  obj.acceleration.copy(newAcceleration);
+              if(isPlaying) {
+                const newVelocity = position.clone().sub(obj.prevPosition).divideScalar(deltaTime);
+                if(isFinite(newVelocity.x) && isFinite(newVelocity.y) && isFinite(newVelocity.z)) {
+                  const newAcceleration = newVelocity.clone().sub(obj.velocity).divideScalar(deltaTime);
+    
+                  obj.velocity.copy(newVelocity);
+                  if(isFinite(newAcceleration.x) && isFinite(newAcceleration.y) && isFinite(newAcceleration.z)) {
+                    obj.acceleration.copy(newAcceleration);
+                  }
                 }
+                obj.prevPosition.copy(position);
               }
-              obj.prevPosition.copy(position);
   
               const velocityMagnitude = obj.velocity.length();
               const accelerationMagnitude = obj.acceleration.length();
   
               const labelDiv = obj.label.element as HTMLDivElement;
+              const status = isPlaying ? '►' : '❚❚';
               labelDiv.innerHTML = `
-                ${name}<br>
+                ${name} ${status}<br>
                 Dist: ${distanceToSun.toFixed(2)} AU<br>
                 Vel: ${velocityMagnitude.toFixed(2)} AU/s<br>
                 Acc: ${accelerationMagnitude.toFixed(2)} AU/s²
@@ -231,14 +244,8 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, isPl
         }
       });
     };
-  }, []); // Note: dependencies removed to prevent re-creation of scene on every render.
+  }, []);
   
-  // This effect handles changes in props that don't require a full scene rebuild
-  useEffect(() => {
-     state.clock.start();
-  }, [isPlaying]);
-
-
   return <div ref={mountRef} className="absolute inset-0 w-full h-full" />;
 };
 
