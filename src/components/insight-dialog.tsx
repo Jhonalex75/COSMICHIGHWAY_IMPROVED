@@ -13,6 +13,13 @@ interface InsightDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
+// This is a mock implementation. In a real scenario, you'd get this from the 3D simulation state.
+const getMockMetrics = () => ({
+    distanceToSun: Math.random() * 5,
+    velocity: Math.random() * 20,
+    acceleration: Math.random() * 5,
+});
+
 const InsightDialog: React.FC<InsightDialogProps> = ({ asteroid, open, onOpenChange }) => {
   const [insight, setInsight] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -26,11 +33,18 @@ const InsightDialog: React.FC<InsightDialogProps> = ({ asteroid, open, onOpenCha
       
       const fetchInsight = async () => {
         try {
+          // In a real application, you would pass the actual current metrics from the simulation state.
+          // For this example, we'll use mocked values.
+          const currentMetrics = getMockMetrics();
+
           const result = await asteroidInsights({
             name: asteroid.name,
             semiMajorAxis: asteroid.elements.a,
             eccentricity: asteroid.elements.e,
             inclination: asteroid.elements.i,
+            distanceToSun: currentMetrics.distanceToSun,
+            velocity: currentMetrics.velocity,
+            acceleration: currentMetrics.acceleration,
           });
           setInsight(result.insights);
         } catch (e) {
@@ -77,3 +91,5 @@ const InsightDialog: React.FC<InsightDialogProps> = ({ asteroid, open, onOpenCha
 };
 
 export default InsightDialog;
+
+    

@@ -16,10 +16,23 @@ interface SolarSystemProps {
   onAsteroidClick: (name: string) => void;
 }
 
+interface CelestialObject {
+  body: THREE.Object3D;
+  path: THREE.CatmullRomCurve3;
+  label: CSS2DObject;
+  prevPosition: THREE.Vector3;
+  velocity: THREE.Vector3;
+  acceleration: THREE.Vector3;
+}
+
 const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, isPlaying, animationSpeed, onAsteroidClick }) => {
   const mountRef = useRef<HTMLDivElement>(null);
-  const state = useRef({
-    celestialObjects: new Map<string, { body: THREE.Object3D, path: THREE.CatmullRomCurve3, label: CSS2DObject }>()
+  const state = useRef<{
+    celestialObjects: Map<string, CelestialObject>;
+    lastUpdateTime: number;
+  }>({
+    celestialObjects: new Map(),
+    lastUpdateTime: 0,
   }).current;
 
   useEffect(() => {
@@ -93,35 +106,74 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, isPl
       scene.add(bodyMesh);
 
       const labelDiv = document.createElement('div');
-      labelDiv.className = 'text-white text-xs p-1 rounded-md bg-black bg-opacity-50';
+      labelDiv.className = 'text-white text-xs p-1 rounded-md bg-black bg-opacity-50 whitespace-nowrap';
       labelDiv.textContent = bodyData.name;
       const label = new CSS2DObject(labelDiv);
       label.position.copy(bodyMesh.position);
       bodyMesh.add(label);
       
-      state.celestialObjects.set(bodyData.name, { body: bodyMesh, path, label });
+      state.celestialObjects.set(bodyData.name, {
+        body: bodyMesh,
+        path,
+        label,
+        prevPosition: path.getPointAt(0),
+        velocity: new THREE.Vector3(),
+        acceleration: new THREE.Vector3(),
+      });
     });
 
     // Animation loop
     let clock = new THREE.Clock();
+    state.lastUpdateTime = clock.getElapsedTime();
+
     const animate = () => {
       requestAnimationFrame(animate);
 
       const elapsedTime = clock.getElapsedTime();
+      const deltaTime = elapsedTime - state.lastUpdateTime;
+      state.lastUpdateTime = elapsedTime;
 
-      state.celestialObjects.forEach(obj => {
+      if (!isPlaying || deltaTime === 0) {
+        controls.update();
+        renderer.render(scene, camera);
+        labelRenderer.render(scene, camera);
+        return;
+      }
+      
+      state.celestialObjects.forEach((obj, name) => {
         const time = (elapsedTime * animationSpeed) % 1;
         const position = obj.path.getPointAt(time);
         obj.body.position.copy(position);
+
+        if (asteroids.some(a => a.name === name)) {
+            const distanceToSun = position.length();
+            
+            const newVelocity = position.clone().sub(obj.prevPosition).divideScalar(deltaTime);
+            const newAcceleration = newVelocity.clone().sub(obj.velocity).divideScalar(deltaTime);
+
+            obj.velocity.copy(newVelocity);
+            obj.acceleration.copy(newAcceleration);
+            obj.prevPosition.copy(position);
+
+            const velocityMagnitude = obj.velocity.length();
+            const accelerationMagnitude = obj.acceleration.length();
+
+            const labelDiv = obj.label.element as HTMLDivElement;
+            labelDiv.innerHTML = `
+              ${name}<br>
+              Dist: ${distanceToSun.toFixed(2)} AU<br>
+              Vel: ${velocityMagnitude.toFixed(2)} AU/s<br>
+              Acc: ${accelerationMagnitude.toFixed(2)} AU/s²
+            `;
+        }
       });
       
       controls.update();
       renderer.render(scene, camera);
       labelRenderer.render(scene, camera);
     };
-    if (isPlaying) {
-      animate();
-    }
+    
+    animate();
     
     // Raycasting for clicks
     const raycaster = new THREE.Raycaster();
@@ -161,14 +213,32 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, isPl
       renderer.dispose();
       scene.traverse(object => {
         if (object instanceof THREE.Mesh) {
-          object.geometry.dispose();
-          object.material.dispose();
+          if (object.geometry) object.geometry.dispose();
+          if (object.material) {
+             if (Array.isArray(object.material)) {
+                object.material.forEach(material => material.dispose());
+             } else {
+                object.material.dispose();
+             }
+          }
         }
       });
     };
-  }, [sun, planets, asteroids, onAsteroidClick, animationSpeed, isPlaying, state]);
+  }, [sun, planets, asteroids, onAsteroidClick]);
+
+   useEffect(() => {
+    const animate = () => {
+        if (!isPlaying) return;
+        requestAnimationFrame(animate);
+    }
+    if (isPlaying) {
+        animate();
+    }
+   }, [isPlaying, animationSpeed])
 
   return <div ref={mountRef} className="absolute inset-0 w-full h-full" />;
 };
 
 export default SolarSystem;
+
+    
