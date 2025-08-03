@@ -24,6 +24,7 @@ interface CelestialObject {
   prevPosition: THREE.Vector3;
   velocity: THREE.Vector3;
   acceleration: THREE.Vector3;
+  data: Planet | Asteroid;
 }
 
 const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, isPlaying, animationSpeed, onAsteroidClick, onMetricsUpdate }) => {
@@ -122,6 +123,7 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, isPl
         prevPosition: path.getPointAt(0),
         velocity: new THREE.Vector3(),
         acceleration: new THREE.Vector3(),
+        data: bodyData,
       });
     });
 
@@ -137,7 +139,8 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, isPl
 
       if (isPlaying && deltaTime > 0) {
         state.celestialObjects.forEach((obj, name) => {
-          const time = (elapsedTime * animationSpeed) % 1;
+          const visualSpeedMultiplier = (obj.data as Asteroid).visualSpeedMultiplier ?? 1.0;
+          const time = (elapsedTime * animationSpeed * visualSpeedMultiplier) % 1;
           const position = obj.path.getPointAt(time);
           obj.body.position.copy(position);
   

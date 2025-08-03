@@ -21,6 +21,7 @@ export interface Planet extends CelestialBody {
 
 export interface Asteroid extends CelestialBody {
   classification: string;
+  visualSpeedMultiplier?: number;
 }
 
 export const SUN_DATA: CelestialBody = {
@@ -81,6 +82,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0xf97316, // orange-500
     radius: 0.005,
     classification: classifyOrbit(1.2005),
+    visualSpeedMultiplier: 1.0,
   },
   borisov: {
     name: "2I/Borisov",
@@ -88,6 +90,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0xef4444, // red-500
     radius: 0.005,
     classification: classifyOrbit(3.357),
+    visualSpeedMultiplier: 0.2,
   },
   atlas: {
     name: "3I/Atlas",
@@ -95,5 +98,6 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0x22d3ee, // cyan-400
     radius: 0.005,
     classification: classifyOrbit(2.156),
+    visualSpeedMultiplier: 0.4,
   },
 };
