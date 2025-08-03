@@ -10,7 +10,7 @@ import InfoPanel from '@/components/info-panel';
 
 export default function Home() {
   const [isPlaying, setIsPlaying] = useState(true);
-  const [animationSpeed, setAnimationSpeed] = useState(0.05);
+  const [animationSpeed, setAnimationSpeed] = useState(0.01);
   const [selectedAsteroid, setSelectedAsteroid] = useState<Asteroid | null>(null);
   const [asteroidMetrics, setAsteroidMetrics] = useState<Record<string, { distanceToSun: number; velocity: number; acceleration: number }>>({});
 
