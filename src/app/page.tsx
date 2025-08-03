@@ -6,17 +6,23 @@ import { ASTEROID_DATA, PLANET_DATA, SUN_DATA } from '@/lib/celestial-data';
 import SolarSystem from '@/components/solar-system';
 import Controls from '@/components/controls';
 import InsightDialog from '@/components/insight-dialog';
+import InfoPanel from '@/components/info-panel';
 
 export default function Home() {
   const [isPlaying, setIsPlaying] = useState(true);
   const [animationSpeed, setAnimationSpeed] = useState(0.2);
   const [selectedAsteroid, setSelectedAsteroid] = useState<Asteroid | null>(null);
+  const [asteroidMetrics, setAsteroidMetrics] = useState<Record<string, { distanceToSun: number; velocity: number; acceleration: number }>>({});
 
   const handleAsteroidClick = (asteroidName: string) => {
     const asteroid = ASTEROID_DATA[asteroidName as keyof typeof ASTEROID_DATA];
     if (asteroid) {
       setSelectedAsteroid(asteroid);
     }
+  };
+
+  const handleMetricsUpdate = (name: string, metrics: { distanceToSun: number; velocity: number; acceleration: number }) => {
+    setAsteroidMetrics(prev => ({ ...prev, [name]: metrics }));
   };
 
   return (
@@ -33,6 +39,7 @@ export default function Home() {
         isPlaying={isPlaying}
         animationSpeed={animationSpeed}
         onAsteroidClick={handleAsteroidClick}
+        onMetricsUpdate={handleMetricsUpdate}
       />
       
       <Controls
@@ -42,8 +49,11 @@ export default function Home() {
         onSpeedChange={setAnimationSpeed}
       />
 
+      <InfoPanel />
+
       <InsightDialog
         asteroid={selectedAsteroid}
+        metrics={selectedAsteroid ? asteroidMetrics[selectedAsteroid.name] : null}
         open={!!selectedAsteroid}
         onOpenChange={(isOpen) => {
           if (!isOpen) {

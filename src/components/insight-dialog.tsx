@@ -9,42 +9,32 @@ import { Badge } from '@/components/ui/badge';
 
 interface InsightDialogProps {
   asteroid: Asteroid | null;
+  metrics: { distanceToSun: number; velocity: number; acceleration: number; } | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-// This is a mock implementation. In a real scenario, you'd get this from the 3D simulation state.
-const getMockMetrics = () => ({
-    distanceToSun: Math.random() * 5,
-    velocity: Math.random() * 20,
-    acceleration: Math.random() * 5,
-});
-
-const InsightDialog: React.FC<InsightDialogProps> = ({ asteroid, open, onOpenChange }) => {
+const InsightDialog: React.FC<InsightDialogProps> = ({ asteroid, metrics, open, onOpenChange }) => {
   const [insight, setInsight] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (asteroid && open) {
+    if (asteroid && metrics && open) {
       setLoading(true);
       setInsight(null);
       setError(null);
       
       const fetchInsight = async () => {
         try {
-          // In a real application, you would pass the actual current metrics from the simulation state.
-          // For this example, we'll use mocked values.
-          const currentMetrics = getMockMetrics();
-
           const result = await asteroidInsights({
             name: asteroid.name,
             semiMajorAxis: asteroid.elements.a,
             eccentricity: asteroid.elements.e,
             inclination: asteroid.elements.i,
-            distanceToSun: currentMetrics.distanceToSun,
-            velocity: currentMetrics.velocity,
-            acceleration: currentMetrics.acceleration,
+            distanceToSun: metrics.distanceToSun,
+            velocity: metrics.velocity,
+            acceleration: metrics.acceleration,
           });
           setInsight(result.insights);
         } catch (e) {
@@ -57,7 +47,7 @@ const InsightDialog: React.FC<InsightDialogProps> = ({ asteroid, open, onOpenCha
       
       fetchInsight();
     }
-  }, [asteroid, open]);
+  }, [asteroid, metrics, open]);
 
   if (!asteroid) return null;
 
@@ -73,7 +63,7 @@ const InsightDialog: React.FC<InsightDialogProps> = ({ asteroid, open, onOpenCha
             <Badge variant="secondary">i: {asteroid.elements.i.toFixed(2)}°</Badge>
           </DialogDescription>
         </DialogHeader>
-        <div className="mt-4 prose prose-invert prose-sm text-foreground/90">
+        <div className="mt-4 prose prose-invert prose-sm text-foreground/90 max-h-[60vh] overflow-y-auto">
           <h3 className="text-lg font-semibold text-primary-foreground">Educational Insights</h3>
           {loading && (
             <div className="space-y-2">
@@ -91,5 +81,3 @@ const InsightDialog: React.FC<InsightDialogProps> = ({ asteroid, open, onOpenCha
 };
 
 export default InsightDialog;
-
-    

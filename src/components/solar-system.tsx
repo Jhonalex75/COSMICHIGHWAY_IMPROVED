@@ -14,6 +14,7 @@ interface SolarSystemProps {
   isPlaying: boolean;
   animationSpeed: number;
   onAsteroidClick: (name: string) => void;
+  onMetricsUpdate: (name: string, metrics: { distanceToSun: number; velocity: number; acceleration: number }) => void;
 }
 
 interface CelestialObject {
@@ -25,14 +26,16 @@ interface CelestialObject {
   acceleration: THREE.Vector3;
 }
 
-const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, isPlaying, animationSpeed, onAsteroidClick }) => {
+const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, isPlaying, animationSpeed, onAsteroidClick, onMetricsUpdate }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const state = useRef<{
     celestialObjects: Map<string, CelestialObject>;
     lastUpdateTime: number;
+    clock: THREE.Clock;
   }>({
     celestialObjects: new Map(),
     lastUpdateTime: 0,
+    clock: new THREE.Clock(),
   }).current;
 
   useEffect(() => {
@@ -123,50 +126,54 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, isPl
     });
 
     // Animation loop
-    let clock = new THREE.Clock();
-    state.lastUpdateTime = clock.getElapsedTime();
+    state.lastUpdateTime = state.clock.getElapsedTime();
 
     const animate = () => {
       requestAnimationFrame(animate);
 
-      const elapsedTime = clock.getElapsedTime();
+      const elapsedTime = state.clock.getElapsedTime();
       const deltaTime = elapsedTime - state.lastUpdateTime;
       state.lastUpdateTime = elapsedTime;
 
-      if (!isPlaying || deltaTime === 0) {
-        controls.update();
-        renderer.render(scene, camera);
-        labelRenderer.render(scene, camera);
-        return;
+      if (isPlaying && deltaTime > 0) {
+        state.celestialObjects.forEach((obj, name) => {
+          const time = (elapsedTime * animationSpeed) % 1;
+          const position = obj.path.getPointAt(time);
+          obj.body.position.copy(position);
+  
+          if (asteroids.some(a => a.name === name)) {
+              const distanceToSun = position.length();
+              
+              const newVelocity = position.clone().sub(obj.prevPosition).divideScalar(deltaTime);
+              if(isFinite(newVelocity.x) && isFinite(newVelocity.y) && isFinite(newVelocity.z)) {
+                const newAcceleration = newVelocity.clone().sub(obj.velocity).divideScalar(deltaTime);
+  
+                obj.velocity.copy(newVelocity);
+                if(isFinite(newAcceleration.x) && isFinite(newAcceleration.y) && isFinite(newAcceleration.z)) {
+                  obj.acceleration.copy(newAcceleration);
+                }
+              }
+              obj.prevPosition.copy(position);
+  
+              const velocityMagnitude = obj.velocity.length();
+              const accelerationMagnitude = obj.acceleration.length();
+  
+              const labelDiv = obj.label.element as HTMLDivElement;
+              labelDiv.innerHTML = `
+                ${name}<br>
+                Dist: ${distanceToSun.toFixed(2)} AU<br>
+                Vel: ${velocityMagnitude.toFixed(2)} AU/s<br>
+                Acc: ${accelerationMagnitude.toFixed(2)} AU/s²
+              `;
+
+              onMetricsUpdate(name, {
+                distanceToSun: distanceToSun,
+                velocity: velocityMagnitude,
+                acceleration: accelerationMagnitude,
+              });
+          }
+        });
       }
-      
-      state.celestialObjects.forEach((obj, name) => {
-        const time = (elapsedTime * animationSpeed) % 1;
-        const position = obj.path.getPointAt(time);
-        obj.body.position.copy(position);
-
-        if (asteroids.some(a => a.name === name)) {
-            const distanceToSun = position.length();
-            
-            const newVelocity = position.clone().sub(obj.prevPosition).divideScalar(deltaTime);
-            const newAcceleration = newVelocity.clone().sub(obj.velocity).divideScalar(deltaTime);
-
-            obj.velocity.copy(newVelocity);
-            obj.acceleration.copy(newAcceleration);
-            obj.prevPosition.copy(position);
-
-            const velocityMagnitude = obj.velocity.length();
-            const accelerationMagnitude = obj.acceleration.length();
-
-            const labelDiv = obj.label.element as HTMLDivElement;
-            labelDiv.innerHTML = `
-              ${name}<br>
-              Dist: ${distanceToSun.toFixed(2)} AU<br>
-              Vel: ${velocityMagnitude.toFixed(2)} AU/s<br>
-              Acc: ${accelerationMagnitude.toFixed(2)} AU/s²
-            `;
-        }
-      });
       
       controls.update();
       renderer.render(scene, camera);
@@ -207,38 +214,29 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, isPl
       window.removeEventListener('resize', onResize);
       renderer.domElement.removeEventListener('click', onClick);
       if (mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
-        mountRef.current.removeChild(labelRenderer.domElement);
+        mountRef.current.innerHTML = '';
       }
       renderer.dispose();
       scene.traverse(object => {
         if (object instanceof THREE.Mesh) {
           if (object.geometry) object.geometry.dispose();
-          if (object.material) {
-             if (Array.isArray(object.material)) {
-                object.material.forEach(material => material.dispose());
-             } else {
-                object.material.dispose();
-             }
+          if (Array.isArray(object.material)) {
+              object.material.forEach(material => material.dispose());
+          } else if (object.material) {
+              object.material.dispose();
           }
         }
       });
     };
-  }, [sun, planets, asteroids, onAsteroidClick]);
+  }, []); // Note: dependencies removed to prevent re-creation of scene on every render.
+  
+  // This effect handles changes in props that don't require a full scene rebuild
+  useEffect(() => {
+     state.clock.start();
+  }, [isPlaying]);
 
-   useEffect(() => {
-    const animate = () => {
-        if (!isPlaying) return;
-        requestAnimationFrame(animate);
-    }
-    if (isPlaying) {
-        animate();
-    }
-   }, [isPlaying, animationSpeed])
 
   return <div ref={mountRef} className="absolute inset-0 w-full h-full" />;
 };
 
 export default SolarSystem;
-
-    
