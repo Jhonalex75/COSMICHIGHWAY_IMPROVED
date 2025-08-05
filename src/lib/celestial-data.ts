@@ -90,7 +90,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0xef4444, // red-500
     radius: 0.005,
     classification: classifyOrbit(3.357),
-    visualSpeedMultiplier: 0.08,
+    visualSpeedMultiplier: 0.07,
   },
   atlas: {
     name: "3I/Atlas",
@@ -98,7 +98,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0x22d3ee, // cyan-400
     radius: 0.005,
     classification: classifyOrbit(2.156),
-    visualSpeedMultiplier: 0.1,
+    visualSpeedMultiplier: 0.09,
   },
 };
 
@@ -114,35 +114,35 @@ export const ASTEROID_INFO: Record<string, Record<string, InfoCategory>> = {
       items: {
         "Fecha": "19 de octubre de 2017",
         "Descubridor": "Robert Weryk",
-        "Telescopio": "Pan-STARRS 1 (Haleakala, Hawaii)",
-        "Distancia Inicial": "0.2 UA (30,000,000 km) de la Tierra",
+        "Telescopio": "Pan-STARRS 1 (Hawaii)",
+        "Distancia Inicial": "0.2 UA (30,000,000 km)",
       }
     },
     physical: {
       title: "Características Físicas",
       items: {
-        "Nombre": "Hawaiano: 'Visitante de lejos que llega primero'",
-        "Forma": "Alargada, sin precedentes en nuestro sistema solar",
         "Velocidad Máxima": "87.71 km/s (cerca del perihelio)",
+        "Nombre": "Hawaiano: 'Visitante de lejos que llega primero'",
+        "Forma": "Muy alargada, sin precedentes",
         "Clasificación": "Primero cometa (C/2017 U1), luego asteroide (A/2017 U1), finalmente interestelar (1I)",
       }
     },
     orbital: {
       title: "Parámetros Orbitales",
       items: {
-        "Excentricidad": "1.20 (Hiperbólica, no ligado al Sol)",
-        "Inclinación": "122.7° (respecto a la eclíptica)",
-        "Velocidad Hiperbólica": "~26.33 km/s (velocidad de entrada/salida del sistema)",
-        "Aceleración Anómala": "Leve aceleración no gravitacional detectada, sin coma visible",
+        "Excentricidad": "1.20 (Hiperbólica)",
+        "Inclinación": "122.7° (muy inclinado)",
+        "Velocidad de Entrada": "~26.33 km/s",
+        "Aceleración Anómala": "Detectada leve aceleración no gravitacional, sin coma visible",
       }
     },
     composition: {
       title: "Composición y Teorías",
       items: {
         "Composición visible": "Rocosa/metálica, color rojizo, sin coma de gas o polvo",
-        "Hipótesis Principal": "Fragmento de un planeta rico en nitrógeno, similar a Plutón (Iceberg de Nitrógeno)",
-        "Otras Teorías": "Iceberg de hidrógeno, objeto rico en orgánicos, tecnología extraterrestre (Avi Loeb)",
-        "Origen Posible": "Encuentro hace 1.3 millones de años con la estrella TYC 4742-1027-1",
+        "Hipótesis Principal": "Fragmento de un planeta rico en nitrógeno (Iceberg de Nitrógeno)",
+        "Otras Teorías": "Iceberg de hidrógeno, objeto rico en orgánicos, tecnología (Avi Loeb)",
+        "Origen Posible": "Sistema estelar binario",
       }
     }
   },
@@ -168,9 +168,10 @@ export const ASTEROID_INFO: Record<string, Record<string, InfoCategory>> = {
     orbital: {
       title: "Parámetros Orbitales",
       items: {
-        "Excentricidad": "3.36 (extremadamente hiperbólica)",
+        "Excentricidad": "~3.36 (extremadamente hiperbólica)",
         "Inclinación": "44° (respecto a la eclíptica)",
         "Trayectoria": "No ligado gravitacionalmente al Sistema Solar",
+        "Origen Posible": "Sistema estelar Kruger 60",
       }
     },
     composition: {
@@ -179,7 +180,7 @@ export const ASTEROID_INFO: Record<string, Record<string, InfoCategory>> = {
         "Composición Clave": "Cantidades inusualmente altas de monóxido de carbono (CO)",
         "Significado": "Sugiere formación en una región muy fría y rica en carbono de su sistema estelar",
         "Similitud": "Más parecido a los cometas de nuestro propio Sistema Solar que 'Oumuamua",
-        "Telescopios Clave": "Hubble, ALMA, VLT, Keck, William Herschel, Gemini North",
+        "Telescopios Clave": "Hubble, ALMA, VLT, Keck",
       }
     }
   },
@@ -188,15 +189,15 @@ export const ASTEROID_INFO: Record<string, Record<string, InfoCategory>> = {
       title: "Descubrimiento Hipotético",
       items: {
         "Fecha": "01 de julio de 2025",
-        "Descubridor": "Sistema ATLAS (Sudáfrica)",
-        "Confirmación": "Observatorio Vera C. Rubin (Chile)",
+        "Descubridor": "Sistema ATLAS",
+        "Ubicación": "Telescopio en Rio Hurtado, Chile",
         "Designación": "A/2025 N1 (ATLAS)",
       }
     },
     physical: {
       title: "Características Físicas",
       items: {
-        "Tamaño Estimado": "~11 km (7 millas) de ancho",
+        "Tamaño Estimado": "~11 km de ancho",
         "Récord": "El objeto interestelar más grande jamás detectado",
         "Velocidad de Entrada": "~58 km/s",
         "Actividad": "Coma difusa observada y una posible cola peculiar",
@@ -206,8 +207,9 @@ export const ASTEROID_INFO: Record<string, Record<string, InfoCategory>> = {
       title: "Parámetros Orbitales",
       items: {
         "Excentricidad": "2.156 (Hiperbólica)",
-        "Inclinación": "67.8° (respecto a la eclíptica)",
+        "Inclinación": "67.8°",
         "Trayectoria": "Atraviesa el sistema solar interior rápidamente",
+        "Observatorio Clave": "Vera C. Rubin (Chile)",
       }
     },
     composition: {
@@ -215,8 +217,8 @@ export const ASTEROID_INFO: Record<string, Record<string, InfoCategory>> = {
       items: {
         "Investigación": "Científicos analizan datos espectrales para determinar su composición",
         "Importancia": "Oportunidad única para estudiar un objeto prístino a gran escala de otro sistema",
-        "Hipótesis": "Podría ser un planetesimal helado o un fragmento de un núcleo cometario masivo",
-        "Controversia": "Especulación sobre posible tecnología alienígena (Avi Loeb)",
+        "Hipótesis": "Plantesimal helado o fragmento de un núcleo cometario masivo",
+        "Controversia": "Especulación sobre posible tecnología (Avi Loeb)",
       }
     }
   }
