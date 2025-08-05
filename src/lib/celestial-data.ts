@@ -82,7 +82,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0xf97316, // orange-500
     radius: 0.005,
     classification: classifyOrbit(1.2005),
-    visualSpeedMultiplier: 1.0,
+    visualSpeedMultiplier: 2.5,
   },
   borisov: {
     name: "2I/Borisov",
@@ -90,7 +90,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0xef4444, // red-500
     radius: 0.005,
     classification: classifyOrbit(3.357),
-    visualSpeedMultiplier: 1.0,
+    visualSpeedMultiplier: 2.5,
   },
   atlas: {
     name: "3I/Atlas",
@@ -98,36 +98,117 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0x22d3ee, // cyan-400
     radius: 0.005,
     classification: classifyOrbit(2.156),
-    visualSpeedMultiplier: 1.0,
+    visualSpeedMultiplier: 2.5,
   },
 };
 
 export const ASTEROID_INFO = {
   "1I/'Oumuamua": {
     discovery: {
-      year: 2017,
-      by: "Telescopio Pan-STARRS1 en Hawái",
+      title: "Descubrimiento",
+      items: {
+        "Fecha": "19 de octubre de 2017",
+        "Descubridor": "Robert Weryk",
+        "Telescopio": "Pan-STARRS 1 (Haleakala, Hawaii)",
+        "Distancia": "0.2 UA (30,000,000 km) de la Tierra",
+      }
     },
-    composition: "Se cree que es un objeto rocoso, posiblemente rico en metales y con una superficie enrojecida por la irradiación cósmica. No mostró la coma (atmósfera de gas y polvo) típica de los cometas.",
-    hypothesis: "Su forma extremadamente alargada (diez veces más largo que ancho) es inusual. Las hipótesis van desde que es un fragmento de un planeta destruido hasta un 'iceberg de nitrógeno' desprendido de un cuerpo similar a Plutón en otro sistema estelar.",
-    scientists: "Liderado por Robert Weryk, el descubrimiento generó debate. Avi Loeb, de la Universidad de Harvard, ha postulado la controvertida idea de que podría ser una sonda de origen artificial (una 'vela de luz') debido a su ligera aceleración no gravitacional.",
+    physical: {
+      title: "Características Físicas",
+      items: {
+        "Nombre": "Hawaiano para 'visitante de lejos que llega primero'",
+        "Forma": "Extremadamente alargada",
+        "Velocidad Máx.": "87 km/s",
+        "Clasificación": "Inicialmente cometa (C/2017 U1), luego asteroide interestelar",
+      }
+    },
+    orbital: {
+      title: "Parámetros Orbitales",
+      items: {
+        "Excentricidad": "1.2005 (Hiperbólica)",
+        "Inclinación": "123° (respecto a la eclíptica)",
+        "Origen probable": "Encuentro hace 1.3 Ma con la estrella TYC 4742-1027-1",
+      }
+    },
+    composition: {
+      title: "Composición y Teorías",
+      items: {
+        "Aceleración Anómala": "Detectada sin desgasificación visible (no es un cometa típico)",
+        "Hipótesis Principal": "Iceberg de nitrógeno desprendido de un cuerpo similar a Plutón",
+        "Otras Teorías": "Objeto rocoso/metálico, fragmento planetario",
+      }
+    }
   },
   "2I/Borisov": {
     discovery: {
-      year: 2019,
-      by: "Gennadiy Borisov, un astrónomo aficionado en Crimea, usando su propio telescopio.",
+      title: "Descubrimiento",
+      items: {
+        "Fecha": "30 de agosto de 2019",
+        "Descubridor": "Gennady Borisov",
+        "Observatorio": "MARGO (Crimea)",
+        "Distancia": "2.98 UA del Sol",
+      }
     },
-    composition: "A diferencia de 'Oumuamua, Borisov se parecía mucho a los cometas de nuestro sistema solar. Mostró una coma clara y se detectó la presencia de agua y monóxido de carbono, lo que sugiere que se formó en una región fría, similar al cinturón de Kuiper de nuestro sistema solar.",
-    hypothesis: "Su composición tan familiar sugiere que los procesos de formación de cometas son probablemente muy similares en otros sistemas planetarios. Se considera un cometa 'prístino' que fue eyectado de su sistema estelar de origen.",
-    scientists: "El descubrimiento por un aficionado fue notable. Equipos internacionales, utilizando el Telescopio Espacial Hubble y otros observatorios importantes, confirmaron su naturaleza cometaria y su trayectoria hiperbólica, solidificando su estatus como el segundo visitante interestelar conocido.",
+    physical: {
+      title: "Características Físicas",
+      items: {
+        "Tipo": "Primer cometa interestelar inequívoco",
+        "Actividad": "Cola de polvo visible y coma extendida",
+        "Velocidad Máx.": "~49 km/s (177,000 km/h) en el perihelio",
+        "Velocidad Interestelar": "~32 km/s",
+      }
+    },
+    orbital: {
+      title: "Parámetros Orbitales",
+      items: {
+        "Excentricidad": "3.356 (Hiperbólica extrema)",
+        "Inclinación": "44.05°",
+        "Trayectoria": "No ligado gravitacionalmente al Sistema Solar",
+      }
+    },
+    composition: {
+      title: "Composición y Análisis",
+      items: {
+        "Composición Clave": "Cantidades inusualmente altas de monóxido de carbono (CO)",
+        "Significado": "Sugiere que se formó en una región muy fría de su sistema estelar de origen",
+        "Telescopios Clave": "Hubble, ALMA, Telescopio William Herschel",
+      }
+    }
   },
   "3I/Atlas": {
     discovery: {
-      year: 2025,
-      by: "Un telescopio en Sudamérica (datos basados en parámetros de simulación).",
+      title: "Descubrimiento",
+      items: {
+        "Fecha": "1 de julio de 2024",
+        "Descubridor": "Sistema ATLAS (Asteroid Terrestrial-impact Last Alert Survey)",
+        "Telescopio": "Observatorio Vera C. Rubin (Rio Hurtado, Chile)",
+        "Designación": "C/2025 N1 (ATLAS)",
+      }
     },
-    composition: "Los análisis preliminares sugieren que es un objeto rocoso, posiblemente con algunos volátiles. Su comportamiento no ha mostrado una actividad cometaria significativa, similar a 'Oumuamua en ese aspecto, pero su trayectoria es inequívocamente interestelar.",
-    hypothesis: "Al ser un descubrimiento reciente, las hipótesis aún están en desarrollo. Su existencia refuerza la idea de que los objetos interestelares son más comunes de lo que se pensaba. Estudiar su composición y rotación ayudará a determinar si representa otra clase de objeto interestelar o si comparte características con los dos anteriores.",
-    scientists: "Equipos de todo el mundo están actualmente observando y analizando los datos de 3I/Atlas. La comunidad científica está enfocada en caracterizar su órbita con precisión y obtener espectros para determinar su composición química, buscando pistas sobre su sistema estelar de origen.",
+    physical: {
+      title: "Características Físicas",
+      items: {
+        "Tamaño Estimado": "~11 km (7 millas) de ancho",
+        "Récord": "El objeto interestelar más grande jamás visto",
+        "Velocidad": "58 km/s",
+        "Actividad": "Coma difusa observada",
+      }
+    },
+    orbital: {
+      title: "Parámetros Orbitales",
+      items: {
+        "Excentricidad": "2.156 (Hiperbólica)",
+        "Inclinación": "67.8°",
+        "Trayectoria": "Atravesando el sistema solar interior",
+      }
+    },
+    composition: {
+      title: "Estado Actual y Significado",
+      items: {
+        "Investigación": "Científicos analizando datos antes de que abandone el sistema solar",
+        "Controversia": "Especulación mediática sobre origen artificial (desestimada por la comunidad científica)",
+        "Importancia": "Oportunidad única para estudiar un objeto prístino de otro sistema estelar a gran escala",
+      }
+    }
   }
 };
