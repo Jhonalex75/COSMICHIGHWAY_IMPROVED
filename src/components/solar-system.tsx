@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
@@ -26,6 +26,7 @@ interface CelestialObject {
   acceleration: THREE.Vector3;
   data: Planet | Asteroid;
   timeOffset: number;
+  trajectoryLine: THREE.Line;
 }
 
 const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, playingState, animationSpeed, onAsteroidClick, onMetricsUpdate }) => {
@@ -34,10 +35,14 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, play
     celestialObjects: Map<string, CelestialObject>;
     lastUpdateTime: number;
     clock: THREE.Clock;
+    hoverLabel: CSS2DObject | null;
+    scene: THREE.Scene | null;
   }>({
     celestialObjects: new Map(),
     lastUpdateTime: 0,
     clock: new THREE.Clock(),
+    hoverLabel: null,
+    scene: null,
   }).current;
 
   useEffect(() => {
@@ -46,7 +51,8 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, play
     
     // Scene setup
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, mount.clientWidth / mount.clientHeight, 0.1, 1000);
+    state.scene = scene;
+    const camera = new THREE.PerspectiveCamera(75, mount.clientWidth / mount.clientHeight, 0.1, 2000);
     camera.position.set(0, 80, 150);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -81,9 +87,9 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, play
     // Starfield
     const starVertices = [];
     for (let i = 0; i < 10000; i++) {
-        const x = THREE.MathUtils.randFloatSpread(2000);
-        const y = THREE.MathUtils.randFloatSpread(2000);
-        const z = THREE.MathUtils.randFloatSpread(2000);
+        const x = THREE.MathUtils.randFloatSpread(4000);
+        const y = THREE.MathUtils.randFloatSpread(4000);
+        const z = THREE.MathUtils.randFloatSpread(4000);
         starVertices.push(x, y, z);
     }
     const starGeometry = new THREE.BufferGeometry();
@@ -102,6 +108,8 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, play
       const geometry = new THREE.BufferGeometry().setFromPoints(path.getPoints(500));
       const material = new THREE.LineBasicMaterial({ color: bodyData.color, transparent: true, opacity: 0.5 });
       const trajectoryLine = new THREE.Line(geometry, material);
+      trajectoryLine.name = `trajectory-${bodyData.name}`;
+      trajectoryLine.userData = { bodyName: bodyData.name };
       scene.add(trajectoryLine);
 
       const sphereGeometry = new THREE.SphereGeometry(bodyData.radius * 200, 16, 16);
@@ -125,10 +133,18 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, play
         velocity: new THREE.Vector3(),
         acceleration: new THREE.Vector3(),
         data: bodyData,
-        timeOffset: 0,
+        timeOffset: Math.random(),
+        trajectoryLine,
       });
     });
 
+    const hoverLabelDiv = document.createElement('div');
+    hoverLabelDiv.className = 'text-white text-xs p-2 rounded-lg bg-black/70 backdrop-blur-sm whitespace-nowrap border border-white/20';
+    hoverLabelDiv.style.display = 'none';
+    const hoverLabel = new CSS2DObject(hoverLabelDiv);
+    state.hoverLabel = hoverLabel;
+    scene.add(hoverLabel);
+    
     // Animation loop
     state.lastUpdateTime = state.clock.getElapsedTime();
     state.clock.start();
@@ -175,12 +191,7 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, play
   
               const labelDiv = obj.label.element as HTMLDivElement;
               const status = isPlaying ? '►' : '❚❚';
-              labelDiv.innerHTML = `
-                ${name} ${status}<br>
-                Dist: ${distanceToSun.toFixed(2)} AU<br>
-                Vel: ${velocityMagnitude.toFixed(2)} AU/s<br>
-                Acc: ${accelerationMagnitude.toFixed(2)} AU/s²
-              `;
+              labelDiv.innerHTML = `${name} ${status}`;
 
               onMetricsUpdate(name, {
                 distanceToSun: distanceToSun,
@@ -198,9 +209,11 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, play
     
     animate();
     
-    // Raycasting for clicks
     const raycaster = new THREE.Raycaster();
+    // Increase threshold for line intersection
+    raycaster.params.Line.threshold = 0.5;
     const mouse = new THREE.Vector2();
+
     const onClick = (event: MouseEvent) => {
         const rect = renderer.domElement.getBoundingClientRect();
         mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -214,7 +227,41 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, play
             onAsteroidClick(intersects[0].object.name);
         }
     };
+
+    const onMouseMove = (event: MouseEvent) => {
+      if (!state.hoverLabel) return;
+
+      const rect = renderer.domElement.getBoundingClientRect();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+
+      const trajectoryLines = asteroids.map(a => state.celestialObjects.get(a.name)?.trajectoryLine).filter(l => l) as THREE.Line[];
+      const intersects = raycaster.intersectObjects(trajectoryLines);
+
+      if (intersects.length > 0) {
+        const intersection = intersects[0];
+        const point = intersection.point;
+        const bodyName = (intersection.object as any).userData.bodyName;
+        
+        const distToSun = point.length();
+
+        state.hoverLabel.element.style.display = 'block';
+        state.hoverLabel.position.copy(point);
+        state.hoverLabel.element.innerHTML = `
+          <strong class="text-primary">${bodyName}</strong><br>
+          Dist. Sol: ${distToSun.toFixed(2)} AU<br>
+          X: ${point.x.toFixed(2)} AU<br>
+          Y: ${point.y.toFixed(2)} AU<br>
+          Z: ${point.z.toFixed(2)} AU
+        `;
+      } else {
+        state.hoverLabel.element.style.display = 'none';
+      }
+    };
+    
     renderer.domElement.addEventListener('click', onClick);
+    renderer.domElement.addEventListener('mousemove', onMouseMove);
 
     // Handle resize
     const onResize = () => {
@@ -229,11 +276,12 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, play
     return () => {
       window.removeEventListener('resize', onResize);
       renderer.domElement.removeEventListener('click', onClick);
+      renderer.domElement.removeEventListener('mousemove', onMouseMove);
       if (mountRef.current) {
         mountRef.current.innerHTML = '';
       }
       renderer.dispose();
-      scene.traverse(object => {
+      state.scene?.traverse(object => {
         if (object instanceof THREE.Mesh) {
           if (object.geometry) object.geometry.dispose();
           if (Array.isArray(object.material)) {
