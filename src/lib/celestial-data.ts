@@ -82,7 +82,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0xf97316, // orange-500
     radius: 0.005,
     classification: classifyOrbit(1.2005),
-    visualSpeedMultiplier: 1.0,
+    visualSpeedMultiplier: 0.3,
   },
   borisov: {
     name: "2I/Borisov",
@@ -90,7 +90,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0xef4444, // red-500
     radius: 0.005,
     classification: classifyOrbit(3.357),
-    visualSpeedMultiplier: 0.2,
+    visualSpeedMultiplier: 0.3,
   },
   atlas: {
     name: "3I/Atlas",
@@ -98,7 +98,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0x22d3ee, // cyan-400
     radius: 0.005,
     classification: classifyOrbit(2.156),
-    visualSpeedMultiplier: 0.4,
+    visualSpeedMultiplier: 0.3,
   },
 };
 
@@ -123,8 +123,8 @@ export const ASTEROID_INFO = {
   },
   "3I/Atlas": {
     discovery: {
-      year: 2022,
-      by: "El sistema de sondeo astronómico ATLAS (Asteroid Terrestrial-impact Last Alert System) en Sudáfrica.",
+      year: 2025,
+      by: "Un telescopio en Sudamérica (datos basados en parámetros de simulación).",
     },
     composition: "Los análisis preliminares sugieren que es un objeto rocoso, posiblemente con algunos volátiles. Su comportamiento no ha mostrado una actividad cometaria significativa, similar a 'Oumuamua en ese aspecto, pero su trayectoria es inequívocamente interestelar.",
     hypothesis: "Al ser un descubrimiento reciente, las hipótesis aún están en desarrollo. Su existencia refuerza la idea de que los objetos interestelares son más comunes de lo que se pensaba. Estudiar su composición y rotación ayudará a determinar si representa otra clase de objeto interestelar o si comparte características con los dos anteriores.",
