@@ -82,7 +82,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0xf97316, // orange-500
     radius: 0.005,
     classification: classifyOrbit(1.2005),
-    visualSpeedMultiplier: 0.8,
+    visualSpeedMultiplier: 0.05,
   },
   borisov: {
     name: "2I/Borisov",
@@ -90,7 +90,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0xef4444, // red-500
     radius: 0.005,
     classification: classifyOrbit(3.357),
-    visualSpeedMultiplier: 1.0,
+    visualSpeedMultiplier: 0.08,
   },
   atlas: {
     name: "3I/Atlas",
@@ -98,11 +98,16 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0x22d3ee, // cyan-400
     radius: 0.005,
     classification: classifyOrbit(2.156),
-    visualSpeedMultiplier: 1.2,
+    visualSpeedMultiplier: 0.1,
   },
 };
 
-export const ASTEROID_INFO = {
+type InfoCategory = {
+  title: string;
+  items: Record<string, string>;
+};
+
+export const ASTEROID_INFO: Record<string, Record<string, InfoCategory>> = {
   "1I/'Oumuamua": {
     discovery: {
       title: "Descubrimiento",
@@ -110,33 +115,34 @@ export const ASTEROID_INFO = {
         "Fecha": "19 de octubre de 2017",
         "Descubridor": "Robert Weryk",
         "Telescopio": "Pan-STARRS 1 (Haleakala, Hawaii)",
-        "Distancia Inicial": "0.2 UA de la Tierra",
+        "Distancia Inicial": "0.2 UA (30,000,000 km) de la Tierra",
       }
     },
     physical: {
       title: "Características Físicas",
       items: {
         "Nombre": "Hawaiano: 'Visitante de lejos que llega primero'",
-        "Forma": "Extremadamente alargada, sin precedentes",
-        "Velocidad Máxima": "~87 km/s (cerca del perihelio)",
-        "Clasificación": "Inicialmente cometa, reclasificado como objeto interestelar",
+        "Forma": "Alargada, sin precedentes en nuestro sistema solar",
+        "Velocidad Máxima": "87.71 km/s (cerca del perihelio)",
+        "Clasificación": "Primero cometa (C/2017 U1), luego asteroide (A/2017 U1), finalmente interestelar (1I)",
       }
     },
     orbital: {
       title: "Parámetros Orbitales",
       items: {
-        "Excentricidad": "1.20 (Hiperbólica)",
-        "Inclinación": "123° (respecto a la eclíptica)",
-        "Velocidad Hiperbólica": "~26.3 km/s",
-        "Aceleración Anómala": "Leve aceleración no gravitacional detectada",
+        "Excentricidad": "1.20 (Hiperbólica, no ligado al Sol)",
+        "Inclinación": "122.7° (respecto a la eclíptica)",
+        "Velocidad Hiperbólica": "~26.33 km/s (velocidad de entrada/salida del sistema)",
+        "Aceleración Anómala": "Leve aceleración no gravitacional detectada, sin coma visible",
       }
     },
     composition: {
       title: "Composición y Teorías",
       items: {
-        "Composición visible": "Rocosa/metálica, sin coma de gas o polvo",
-        "Hipótesis principal": "Iceberg de nitrógeno desprendido de un exoplaneta",
-        "Otras teorías": "Fragmento planetario, objeto rico en hidrógeno, tecnología alienígena (Avi Loeb)",
+        "Composición visible": "Rocosa/metálica, color rojizo, sin coma de gas o polvo",
+        "Hipótesis Principal": "Fragmento de un planeta rico en nitrógeno, similar a Plutón (Iceberg de Nitrógeno)",
+        "Otras Teorías": "Iceberg de hidrógeno, objeto rico en orgánicos, tecnología extraterrestre (Avi Loeb)",
+        "Origen Posible": "Encuentro hace 1.3 millones de años con la estrella TYC 4742-1027-1",
       }
     }
   },
@@ -145,45 +151,46 @@ export const ASTEROID_INFO = {
       title: "Descubrimiento",
       items: {
         "Fecha": "30 de agosto de 2019",
-        "Descubridor": "Gennady Borisov",
+        "Descubridor": "Gennady Borisov (astrónomo aficionado)",
         "Observatorio": "MARGO (Crimea)",
-        "Distancia inicial": "~3 UA del Sol",
+        "Distancia Inicial": "~3 UA del Sol",
       }
     },
     physical: {
       title: "Características Físicas",
       items: {
         "Tipo": "Primer cometa interestelar inequívoco",
-        "Actividad": "Cola de polvo visible y coma extendida",
+        "Actividad Cometaria": "Cola de polvo visible y coma de gas extendida",
         "Velocidad Máxima": "~49 km/s (177,000 km/h) en el perihelio",
+        "Velocidad Hiperbólica": "~32 km/s (velocidad de entrada/salida)",
       }
     },
     orbital: {
       title: "Parámetros Orbitales",
       items: {
-        "Excentricidad": "~3.36 (Extremadamente hiperbólica)",
+        "Excentricidad": "3.36 (extremadamente hiperbólica)",
         "Inclinación": "44° (respecto a la eclíptica)",
-        "Velocidad Hiperbólica": "~32 km/s",
+        "Trayectoria": "No ligado gravitacionalmente al Sistema Solar",
       }
     },
     composition: {
       title: "Composición y Análisis",
       items: {
         "Composición Clave": "Cantidades inusualmente altas de monóxido de carbono (CO)",
-        "Significado": "Sugiere formación en una región muy fría de su sistema estelar",
-        "Similitud": "Más parecido a los cometas de nuestro Sistema Solar que 'Oumuamua",
-        "Telescopios Clave": "Hubble, ALMA, VLT, Keck",
+        "Significado": "Sugiere formación en una región muy fría y rica en carbono de su sistema estelar",
+        "Similitud": "Más parecido a los cometas de nuestro propio Sistema Solar que 'Oumuamua",
+        "Telescopios Clave": "Hubble, ALMA, VLT, Keck, William Herschel, Gemini North",
       }
     }
   },
   "3I/Atlas": {
     discovery: {
-      title: "Descubrimiento",
+      title: "Descubrimiento Hipotético",
       items: {
-        "Fecha": "1 de julio de 2025",
+        "Fecha": "01 de julio de 2025",
         "Descubridor": "Sistema ATLAS (Sudáfrica)",
-        "Designación Oficial": "A/2025 N1 (ATLAS)",
         "Confirmación": "Observatorio Vera C. Rubin (Chile)",
+        "Designación": "A/2025 N1 (ATLAS)",
       }
     },
     physical: {
@@ -191,8 +198,8 @@ export const ASTEROID_INFO = {
       items: {
         "Tamaño Estimado": "~11 km (7 millas) de ancho",
         "Récord": "El objeto interestelar más grande jamás detectado",
-        "Velocidad": "~58 km/s",
-        "Actividad": "Coma difusa y una posible cola peculiar observadas",
+        "Velocidad de Entrada": "~58 km/s",
+        "Actividad": "Coma difusa observada y una posible cola peculiar",
       }
     },
     orbital: {
@@ -209,6 +216,7 @@ export const ASTEROID_INFO = {
         "Investigación": "Científicos analizan datos espectrales para determinar su composición",
         "Importancia": "Oportunidad única para estudiar un objeto prístino a gran escala de otro sistema",
         "Hipótesis": "Podría ser un planetesimal helado o un fragmento de un núcleo cometario masivo",
+        "Controversia": "Especulación sobre posible tecnología alienígena (Avi Loeb)",
       }
     }
   }
