@@ -82,7 +82,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0xf97316, // orange-500
     radius: 0.005,
     classification: classifyOrbit(1.2005),
-    visualSpeedMultiplier: 2.5,
+    visualSpeedMultiplier: 2.0,
   },
   borisov: {
     name: "2I/Borisov",
@@ -90,7 +90,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0xef4444, // red-500
     radius: 0.005,
     classification: classifyOrbit(3.357),
-    visualSpeedMultiplier: 2.5,
+    visualSpeedMultiplier: 2.2,
   },
   atlas: {
     name: "3I/Atlas",
@@ -98,7 +98,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0x22d3ee, // cyan-400
     radius: 0.005,
     classification: classifyOrbit(2.156),
-    visualSpeedMultiplier: 2.5,
+    visualSpeedMultiplier: 2.4,
   },
 };
 
@@ -125,16 +125,16 @@ export const ASTEROID_INFO = {
     orbital: {
       title: "Parámetros Orbitales",
       items: {
-        "Excentricidad": "1.2005 (Hiperbólica)",
-        "Inclinación": "123° (respecto a la eclíptica)",
-        "Origen probable": "Encuentro hace 1.3 Ma con la estrella TYC 4742-1027-1",
+        "Excentricidad": "1.201",
+        "Inclinación": "122.7°",
+        "Velocidad hiperbólica": "~26.33 km/s",
       }
     },
     composition: {
       title: "Composición y Teorías",
       items: {
-        "Aceleración Anómala": "Detectada sin desgasificación visible (no es un cometa típico)",
-        "Hipótesis Principal": "Iceberg de nitrógeno desprendido de un cuerpo similar a Plutón",
+        "Aceleración Anómala": "Detectada sin desgasificación visible",
+        "Hipótesis Principal": "Iceberg de nitrógeno de un exoplaneta similar a Plutón",
         "Otras Teorías": "Objeto rocoso/metálico, fragmento planetario",
       }
     }
@@ -154,23 +154,22 @@ export const ASTEROID_INFO = {
       items: {
         "Tipo": "Primer cometa interestelar inequívoco",
         "Actividad": "Cola de polvo visible y coma extendida",
-        "Velocidad Máx.": "~49 km/s (177,000 km/h) en el perihelio",
-        "Velocidad Interestelar": "~32 km/s",
+        "Velocidad Máx.": "49 km/s (177,000 km/h)",
       }
     },
     orbital: {
       title: "Parámetros Orbitales",
       items: {
-        "Excentricidad": "3.356 (Hiperbólica extrema)",
+        "Excentricidad": "3.357",
         "Inclinación": "44.05°",
-        "Trayectoria": "No ligado gravitacionalmente al Sistema Solar",
+        "Velocidad hiperbólica": "~32 km/s",
       }
     },
     composition: {
       title: "Composición y Análisis",
       items: {
         "Composición Clave": "Cantidades inusualmente altas de monóxido de carbono (CO)",
-        "Significado": "Sugiere que se formó en una región muy fría de su sistema estelar de origen",
+        "Significado": "Sugiere formación en una región muy fría de su sistema estelar",
         "Telescopios Clave": "Hubble, ALMA, Telescopio William Herschel",
       }
     }
@@ -180,9 +179,9 @@ export const ASTEROID_INFO = {
       title: "Descubrimiento",
       items: {
         "Fecha": "1 de julio de 2024",
-        "Descubridor": "Sistema ATLAS (Asteroid Terrestrial-impact Last Alert Survey)",
-        "Telescopio": "Observatorio Vera C. Rubin (Rio Hurtado, Chile)",
-        "Designación": "C/2025 N1 (ATLAS)",
+        "Descubridor": "Sistema ATLAS (Sudáfrica)",
+        "Telescopio": "Observatorio Vera C. Rubin (Chile)",
+        "Designación": "C/2024 BX1 (ATLAS)",
       }
     },
     physical: {
@@ -197,7 +196,7 @@ export const ASTEROID_INFO = {
     orbital: {
       title: "Parámetros Orbitales",
       items: {
-        "Excentricidad": "2.156 (Hiperbólica)",
+        "Excentricidad": "2.156",
         "Inclinación": "67.8°",
         "Trayectoria": "Atravesando el sistema solar interior",
       }
@@ -205,9 +204,9 @@ export const ASTEROID_INFO = {
     composition: {
       title: "Estado Actual y Significado",
       items: {
-        "Investigación": "Científicos analizando datos antes de que abandone el sistema solar",
-        "Controversia": "Especulación mediática sobre origen artificial (desestimada por la comunidad científica)",
-        "Importancia": "Oportunidad única para estudiar un objeto prístino de otro sistema estelar a gran escala",
+        "Investigación": "Científicos analizando datos antes de que abandone el sistema",
+        "Controversia": "Especulación mediática sobre origen artificial (desestimada)",
+        "Importancia": "Oportunidad única para estudiar un objeto prístino a gran escala",
       }
     }
   }
