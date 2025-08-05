@@ -9,7 +9,7 @@ import InsightDialog from '@/components/insight-dialog';
 import InfoPanel from '@/components/info-panel';
 
 export default function Home() {
-  const [animationSpeed, setAnimationSpeed] = useState(0.015);
+  const [animationSpeed, setAnimationSpeed] = useState(0.025);
   const [selectedAsteroid, setSelectedAsteroid] = useState<Asteroid | null>(null);
   const [asteroidMetrics, setAsteroidMetrics] = useState<Record<string, { distanceToSun: number; velocity: number; acceleration: number }>>({});
   const [playingState, setPlayingState] = useState<Record<string, boolean>>({
