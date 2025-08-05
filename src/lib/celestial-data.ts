@@ -101,3 +101,33 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     visualSpeedMultiplier: 0.4,
   },
 };
+
+export const ASTEROID_INFO = {
+  "1I/'Oumuamua": {
+    discovery: {
+      year: 2017,
+      by: "Telescopio Pan-STARRS1 en Hawái",
+    },
+    composition: "Se cree que es un objeto rocoso, posiblemente rico en metales y con una superficie enrojecida por la irradiación cósmica. No mostró la coma (atmósfera de gas y polvo) típica de los cometas.",
+    hypothesis: "Su forma extremadamente alargada (diez veces más largo que ancho) es inusual. Las hipótesis van desde que es un fragmento de un planeta destruido hasta un 'iceberg de nitrógeno' desprendido de un cuerpo similar a Plutón en otro sistema estelar.",
+    scientists: "Liderado por Robert Weryk, el descubrimiento generó debate. Avi Loeb, de la Universidad de Harvard, ha postulado la controvertida idea de que podría ser una sonda de origen artificial (una 'vela de luz') debido a su ligera aceleración no gravitacional.",
+  },
+  "2I/Borisov": {
+    discovery: {
+      year: 2019,
+      by: "Gennadiy Borisov, un astrónomo aficionado en Crimea, usando su propio telescopio.",
+    },
+    composition: "A diferencia de 'Oumuamua, Borisov se parecía mucho a los cometas de nuestro sistema solar. Mostró una coma clara y se detectó la presencia de agua y monóxido de carbono, lo que sugiere que se formó en una región fría, similar al cinturón de Kuiper de nuestro sistema solar.",
+    hypothesis: "Su composición tan familiar sugiere que los procesos de formación de cometas son probablemente muy similares en otros sistemas planetarios. Se considera un cometa 'prístino' que fue eyectado de su sistema estelar de origen.",
+    scientists: "El descubrimiento por un aficionado fue notable. Equipos internacionales, utilizando el Telescopio Espacial Hubble y otros observatorios importantes, confirmaron su naturaleza cometaria y su trayectoria hiperbólica, solidificando su estatus como el segundo visitante interestelar conocido.",
+  },
+  "3I/Atlas": {
+    discovery: {
+      year: 2023,
+      by: "El sistema de sondeo astronómico ATLAS (Asteroid Terrestrial-impact Last Alert System) en Sudáfrica.",
+    },
+    composition: "Los análisis preliminares sugieren que es un objeto rocoso, posiblemente con algunos volátiles. Su comportamiento no ha mostrado una actividad cometaria significativa, similar a 'Oumuamua en ese aspecto, pero su trayectoria es inequívocamente interestelar.",
+    hypothesis: "Al ser un descubrimiento reciente, las hipótesis aún están en desarrollo. Su existencia refuerza la idea de que los objetos interestelares son más comunes de lo que se pensaba. Estudiar su composición y rotación ayudará a determinar si representa otra clase de objeto interestelar o si comparte características con los dos anteriores.",
+    scientists: "Equipos de todo el mundo están actualmente observando y analizando los datos de 3I/Atlas. La comunidad científica está enfocada en caracterizar su órbita con precisión y obtener espectros para determinar su composición química, buscando pistas sobre su sistema estelar de origen.",
+  }
+};

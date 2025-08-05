@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { Asteroid } from '@/lib/celestial-data';
-import { asteroidInsights } from '@/ai/flows/asteroid-insights';
+import { Asteroid, ASTEROID_INFO } from '@/lib/celestial-data';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface InsightDialogProps {
   asteroid: Asteroid | null;
@@ -14,48 +12,16 @@ interface InsightDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const InsightDialog: React.FC<InsightDialogProps> = ({ asteroid, metrics, open, onOpenChange }) => {
-  const [insight, setInsight] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (asteroid && metrics && open) {
-      setLoading(true);
-      setInsight(null);
-      setError(null);
-      
-      const fetchInsight = async () => {
-        try {
-          const result = await asteroidInsights({
-            name: asteroid.name,
-            semiMajorAxis: asteroid.elements.a,
-            eccentricity: asteroid.elements.e,
-            inclination: asteroid.elements.i,
-            distanceToSun: metrics.distanceToSun,
-            velocity: metrics.velocity,
-            acceleration: metrics.acceleration,
-          });
-          setInsight(result.insights);
-        } catch (e) {
-          setError('Failed to generate insights. Please try again later.');
-          console.error(e);
-        } finally {
-          setLoading(false);
-        }
-      };
-      
-      fetchInsight();
-    }
-  }, [asteroid, metrics, open]);
-
+const InsightDialog: React.FC<InsightDialogProps> = ({ asteroid, open, onOpenChange }) => {
   if (!asteroid) return null;
+
+  const info = ASTEROID_INFO[asteroid.name as keyof typeof ASTEROID_INFO];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md w-full">
+      <DialogContent className="max-w-xl w-full">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-headline text-primary">{asteroid.name}</DialogTitle>
+          <DialogTitle className="text-3xl font-headline text-primary">{asteroid.name}</DialogTitle>
           <DialogDescription className="flex flex-wrap gap-2 pt-2">
             <Badge variant="secondary">Type: {asteroid.classification}</Badge>
             <Badge variant="secondary">a: {asteroid.elements.a.toFixed(3)} AU</Badge>
@@ -63,18 +29,31 @@ const InsightDialog: React.FC<InsightDialogProps> = ({ asteroid, metrics, open, 
             <Badge variant="secondary">i: {asteroid.elements.i.toFixed(2)}°</Badge>
           </DialogDescription>
         </DialogHeader>
-        <div className="mt-4 prose prose-invert prose-sm text-foreground/90 max-h-[60vh] overflow-y-auto">
-          <h3 className="text-lg font-semibold text-primary-foreground">Educational Insights</h3>
-          {loading && (
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-5/6" />
-            </div>
-          )}
-          {error && <p className="text-destructive">{error}</p>}
-          {insight && <p>{insight}</p>}
-        </div>
+        <ScrollArea className="max-h-[60vh] pr-4">
+          <div className="mt-4 prose prose-invert prose-sm text-foreground/90">
+            {info && (
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-primary-foreground mb-2">Descubrimiento</h3>
+                  <p><strong>Año:</strong> {info.discovery.year}</p>
+                  <p><strong>Detectado por:</strong> {info.discovery.by}</p>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-primary-foreground mb-2">Composición y Características</h3>
+                  <p>{info.composition}</p>
+                </div>
+                 <div>
+                  <h3 className="text-lg font-semibold text-primary-foreground mb-2">Hipótesis de Origen</h3>
+                  <p>{info.hypothesis}</p>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-primary-foreground mb-2">Científicos y Posturas</h3>
+                  <p>{info.scientists}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

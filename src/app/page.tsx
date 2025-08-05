@@ -9,7 +9,7 @@ import InsightDialog from '@/components/insight-dialog';
 import InfoPanel from '@/components/info-panel';
 
 export default function Home() {
-  const [animationSpeed, setAnimationSpeed] = useState(0.01);
+  const [animationSpeed, setAnimationSpeed] = useState(0.005);
   const [selectedAsteroid, setSelectedAsteroid] = useState<Asteroid | null>(null);
   const [asteroidMetrics, setAsteroidMetrics] = useState<Record<string, { distanceToSun: number; velocity: number; acceleration: number }>>({});
   const [playingState, setPlayingState] = useState<Record<string, boolean>>({
@@ -29,10 +29,6 @@ export default function Home() {
     setAsteroidMetrics(prev => ({ ...prev, [name]: metrics }));
   };
   
-  const handleTogglePlay = (asteroidName: string) => {
-    setPlayingState(prev => ({ ...prev, [asteroidName]: !prev[asteroidName] }));
-  };
-
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-background font-body">
       <div className="absolute top-4 left-4 z-20 text-foreground md:top-8 md:left-8">
@@ -51,11 +47,8 @@ export default function Home() {
       />
       
       <Controls
-        playingState={playingState}
-        onTogglePlay={handleTogglePlay}
-        animationSpeed={animationSpeed}
-        onSpeedChange={setAnimationSpeed}
         asteroids={Object.values(ASTEROID_DATA)}
+        onAsteroidSelect={handleAsteroidClick}
       />
 
       <InfoPanel />
