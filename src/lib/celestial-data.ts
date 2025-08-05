@@ -82,7 +82,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0xf97316, // orange-500
     radius: 0.005,
     classification: classifyOrbit(1.2005),
-    visualSpeedMultiplier: 2.0,
+    visualSpeedMultiplier: 0.8,
   },
   borisov: {
     name: "2I/Borisov",
@@ -90,7 +90,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0xef4444, // red-500
     radius: 0.005,
     classification: classifyOrbit(3.357),
-    visualSpeedMultiplier: 2.2,
+    visualSpeedMultiplier: 1.0,
   },
   atlas: {
     name: "3I/Atlas",
@@ -98,7 +98,7 @@ export const ASTEROID_DATA: Record<string, Asteroid> = {
     color: 0x22d3ee, // cyan-400
     radius: 0.005,
     classification: classifyOrbit(2.156),
-    visualSpeedMultiplier: 2.4,
+    visualSpeedMultiplier: 1.2,
   },
 };
 
@@ -110,32 +110,33 @@ export const ASTEROID_INFO = {
         "Fecha": "19 de octubre de 2017",
         "Descubridor": "Robert Weryk",
         "Telescopio": "Pan-STARRS 1 (Haleakala, Hawaii)",
-        "Distancia": "0.2 UA (30,000,000 km) de la Tierra",
+        "Distancia Inicial": "0.2 UA de la Tierra",
       }
     },
     physical: {
       title: "Características Físicas",
       items: {
-        "Nombre": "Hawaiano para 'visitante de lejos que llega primero'",
-        "Forma": "Extremadamente alargada",
-        "Velocidad Máx.": "87 km/s",
-        "Clasificación": "Inicialmente cometa (C/2017 U1), luego asteroide interestelar",
+        "Nombre": "Hawaiano: 'Visitante de lejos que llega primero'",
+        "Forma": "Extremadamente alargada, sin precedentes",
+        "Velocidad Máxima": "~87 km/s (cerca del perihelio)",
+        "Clasificación": "Inicialmente cometa, reclasificado como objeto interestelar",
       }
     },
     orbital: {
       title: "Parámetros Orbitales",
       items: {
-        "Excentricidad": "1.201",
-        "Inclinación": "122.7°",
-        "Velocidad hiperbólica": "~26.33 km/s",
+        "Excentricidad": "1.20 (Hiperbólica)",
+        "Inclinación": "123° (respecto a la eclíptica)",
+        "Velocidad Hiperbólica": "~26.3 km/s",
+        "Aceleración Anómala": "Leve aceleración no gravitacional detectada",
       }
     },
     composition: {
       title: "Composición y Teorías",
       items: {
-        "Aceleración Anómala": "Detectada sin desgasificación visible",
-        "Hipótesis Principal": "Iceberg de nitrógeno de un exoplaneta similar a Plutón",
-        "Otras Teorías": "Objeto rocoso/metálico, fragmento planetario",
+        "Composición visible": "Rocosa/metálica, sin coma de gas o polvo",
+        "Hipótesis principal": "Iceberg de nitrógeno desprendido de un exoplaneta",
+        "Otras teorías": "Fragmento planetario, objeto rico en hidrógeno, tecnología alienígena (Avi Loeb)",
       }
     }
   },
@@ -146,7 +147,7 @@ export const ASTEROID_INFO = {
         "Fecha": "30 de agosto de 2019",
         "Descubridor": "Gennady Borisov",
         "Observatorio": "MARGO (Crimea)",
-        "Distancia": "2.98 UA del Sol",
+        "Distancia inicial": "~3 UA del Sol",
       }
     },
     physical: {
@@ -154,15 +155,15 @@ export const ASTEROID_INFO = {
       items: {
         "Tipo": "Primer cometa interestelar inequívoco",
         "Actividad": "Cola de polvo visible y coma extendida",
-        "Velocidad Máx.": "49 km/s (177,000 km/h)",
+        "Velocidad Máxima": "~49 km/s (177,000 km/h) en el perihelio",
       }
     },
     orbital: {
       title: "Parámetros Orbitales",
       items: {
-        "Excentricidad": "3.357",
-        "Inclinación": "44.05°",
-        "Velocidad hiperbólica": "~32 km/s",
+        "Excentricidad": "~3.36 (Extremadamente hiperbólica)",
+        "Inclinación": "44° (respecto a la eclíptica)",
+        "Velocidad Hiperbólica": "~32 km/s",
       }
     },
     composition: {
@@ -170,7 +171,8 @@ export const ASTEROID_INFO = {
       items: {
         "Composición Clave": "Cantidades inusualmente altas de monóxido de carbono (CO)",
         "Significado": "Sugiere formación en una región muy fría de su sistema estelar",
-        "Telescopios Clave": "Hubble, ALMA, Telescopio William Herschel",
+        "Similitud": "Más parecido a los cometas de nuestro Sistema Solar que 'Oumuamua",
+        "Telescopios Clave": "Hubble, ALMA, VLT, Keck",
       }
     }
   },
@@ -178,35 +180,35 @@ export const ASTEROID_INFO = {
     discovery: {
       title: "Descubrimiento",
       items: {
-        "Fecha": "1 de julio de 2024",
+        "Fecha": "1 de julio de 2025",
         "Descubridor": "Sistema ATLAS (Sudáfrica)",
-        "Telescopio": "Observatorio Vera C. Rubin (Chile)",
-        "Designación": "C/2024 BX1 (ATLAS)",
+        "Designación Oficial": "A/2025 N1 (ATLAS)",
+        "Confirmación": "Observatorio Vera C. Rubin (Chile)",
       }
     },
     physical: {
       title: "Características Físicas",
       items: {
         "Tamaño Estimado": "~11 km (7 millas) de ancho",
-        "Récord": "El objeto interestelar más grande jamás visto",
-        "Velocidad": "58 km/s",
-        "Actividad": "Coma difusa observada",
+        "Récord": "El objeto interestelar más grande jamás detectado",
+        "Velocidad": "~58 km/s",
+        "Actividad": "Coma difusa y una posible cola peculiar observadas",
       }
     },
     orbital: {
       title: "Parámetros Orbitales",
       items: {
-        "Excentricidad": "2.156",
-        "Inclinación": "67.8°",
-        "Trayectoria": "Atravesando el sistema solar interior",
+        "Excentricidad": "2.156 (Hiperbólica)",
+        "Inclinación": "67.8° (respecto a la eclíptica)",
+        "Trayectoria": "Atraviesa el sistema solar interior rápidamente",
       }
     },
     composition: {
       title: "Estado Actual y Significado",
       items: {
-        "Investigación": "Científicos analizando datos antes de que abandone el sistema",
-        "Controversia": "Especulación mediática sobre origen artificial (desestimada)",
-        "Importancia": "Oportunidad única para estudiar un objeto prístino a gran escala",
+        "Investigación": "Científicos analizan datos espectrales para determinar su composición",
+        "Importancia": "Oportunidad única para estudiar un objeto prístino a gran escala de otro sistema",
+        "Hipótesis": "Podría ser un planetesimal helado o un fragmento de un núcleo cometario masivo",
       }
     }
   }
