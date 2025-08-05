@@ -49,8 +49,8 @@ const INFO_TOPICS = [
     content: `
       <p>Los asteroides interestelares entran y salen del sistema solar a velocidades extremadamente altas. Estas velocidades se conocen como "velocidad hiperbólica excedente" (v∞), que es la velocidad que el objeto retiene incluso después de escapar de la atracción gravitacional del Sol.</p>
       <ul class="list-disc pl-5 space-y-2">
-        <li><strong>1I/'Oumuamua:</strong> Entró al sistema solar a una velocidad de aproximadamente <strong>26.3 km/s</strong> (unas 58,900 mph) con respecto al Sol.</li>
-        <li><strong>2I/Borisov:</strong> Tenía una velocidad aún mayor, de unos <strong>32.2 km/s</strong> (unas 72,000 mph).</li>
+        <li><strong>1I/'Oumuamua:</strong> Entró al sistema solar a una velocidad de aproximadamente <strong>26.33 km/s</strong> (unas 58,900 mph) con respecto al Sol.</li>
+        <li><strong>2I/Borisov:</strong> Tenía una velocidad aún mayor, de unos <strong>33.8 km/s</strong> (unas 75,600 mph).</li>
       </ul>
       <p>Estas altas velocidades son una prueba clave de su origen interestelar, ya que son demasiado rápidas para que los objetos hayan estado orbitando nuestro Sol.</p>
     `

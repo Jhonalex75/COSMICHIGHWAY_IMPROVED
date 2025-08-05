@@ -123,7 +123,7 @@ export const ASTEROID_INFO = {
   },
   "3I/Atlas": {
     discovery: {
-      year: 2023,
+      year: 2022,
       by: "El sistema de sondeo astronómico ATLAS (Asteroid Terrestrial-impact Last Alert System) en Sudáfrica.",
     },
     composition: "Los análisis preliminares sugieren que es un objeto rocoso, posiblemente con algunos volátiles. Su comportamiento no ha mostrado una actividad cometaria significativa, similar a 'Oumuamua en ese aspecto, pero su trayectoria es inequívocamente interestelar.",
