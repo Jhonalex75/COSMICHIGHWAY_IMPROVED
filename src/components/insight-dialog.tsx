@@ -4,6 +4,7 @@ import { Asteroid, ASTEROID_INFO } from '@/lib/celestial-data';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from './ui/button';
 
 interface InsightDialogProps {
   asteroid: Asteroid | null;
@@ -21,12 +22,12 @@ const InsightDialog: React.FC<InsightDialogProps> = ({ asteroid, open, onOpenCha
       <DialogContent className="max-w-xl w-full">
         <DialogHeader>
           <DialogTitle className="text-3xl font-headline text-primary">{asteroid.name}</DialogTitle>
-          <DialogDescription className="flex flex-wrap gap-2 pt-2">
+          <div className="flex flex-wrap gap-2 pt-2">
             <Badge variant="secondary">Type: {asteroid.classification}</Badge>
             <Badge variant="secondary">a: {asteroid.elements.a.toFixed(3)} AU</Badge>
             <Badge variant="secondary">e: {asteroid.elements.e.toFixed(3)}</Badge>
             <Badge variant="secondary">i: {asteroid.elements.i.toFixed(2)}°</Badge>
-          </DialogDescription>
+          </div>
         </DialogHeader>
         <ScrollArea className="max-h-[60vh] pr-4">
           <div className="mt-4 prose prose-invert prose-sm text-foreground/90">
