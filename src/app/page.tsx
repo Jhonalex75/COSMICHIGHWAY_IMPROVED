@@ -9,7 +9,7 @@ import InsightDialog from '@/components/insight-dialog';
 import InfoPanel from '@/components/info-panel';
 
 export default function Home() {
-  const [animationSpeed, setAnimationSpeed] = useState(0.005);
+  const [animationSpeed, setAnimationSpeed] = useState(0.001);
   const [selectedAsteroid, setSelectedAsteroid] = useState<Asteroid | null>(null);
   const [asteroidMetrics, setAsteroidMetrics] = useState<Record<string, { distanceToSun: number; velocity: number; acceleration: number }>>({});
   const [playingState, setPlayingState] = useState<Record<string, boolean>>({
@@ -19,12 +19,12 @@ export default function Home() {
   });
 
   const handleAsteroidClick = (asteroidName: string) => {
-    const asteroid = ASTEROID_DATA[asteroidName as keyof typeof ASTEROID_DATA];
+    const asteroid = Object.values(ASTEROID_DATA).find(a => a.name === asteroidName);
     if (asteroid) {
       setSelectedAsteroid(asteroid);
     }
   };
-
+  
   const handleMetricsUpdate = (name: string, metrics: { distanceToSun: number; velocity: number; acceleration: number }) => {
     setAsteroidMetrics(prev => ({ ...prev, [name]: metrics }));
   };
@@ -55,7 +55,6 @@ export default function Home() {
 
       <InsightDialog
         asteroid={selectedAsteroid}
-        metrics={selectedAsteroid ? asteroidMetrics[selectedAsteroid.name] : null}
         open={!!selectedAsteroid}
         onOpenChange={(isOpen) => {
           if (!isOpen) {

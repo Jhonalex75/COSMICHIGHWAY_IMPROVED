@@ -7,7 +7,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface InsightDialogProps {
   asteroid: Asteroid | null;
-  metrics: { distanceToSun: number; velocity: number; acceleration: number; } | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
