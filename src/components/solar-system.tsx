@@ -191,7 +191,12 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ sun, planets, asteroids, play
   
               const labelDiv = obj.label.element as HTMLDivElement;
               const status = isPlaying ? '►' : '❚❚';
-              labelDiv.innerHTML = `${name} ${status}`;
+              labelDiv.innerHTML = `
+                <div class='font-bold text-primary'>${name} ${status}</div>
+                <div>Dist: ${distanceToSun.toFixed(2)} AU</div>
+                <div>Vel: ${(velocityMagnitude * 10).toFixed(2)} km/s</div>
+                <div>Accel: ${(accelerationMagnitude * 100).toFixed(2)} m/s²</div>
+              `;
 
               onMetricsUpdate(name, {
                 distanceToSun: distanceToSun,
